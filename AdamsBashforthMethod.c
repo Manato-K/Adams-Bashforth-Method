@@ -2,32 +2,35 @@
 #include <stdio.h>
 #include <math.h>
 #define N 50
-float f1(float x,float y)
+float f1(float x,float y,float z)
 { return(x+y); }
 int main(void){
     int i;
-    float x[N+1],y[N+1],h=0.2,r,A,B,C,D;
+    float x[N+1],y[N+1],z[N+1],h=0.2,r,A,B,C,D,E,F;
     x[0]=0.0;
-    y[0]=2.0;
+    y[0]=60.0;
+    z[0]=0.0;
     i=0;
     printf(" x , y ( error )\n");
     do {
         x[i+1]=x[i]+h;
         if(i<4) {
-            A=h*f1(x[i],y[i]);
-            B=h*f1(x[i]+h/2.0,y[i]+A/2.0);
-            C=h*f1(x[i]+h/2.0,y[i]+B/2.0);
-            D=h*f1(x[i]+h,y[i]+C);
-            y[i+1]=y[i]+(A+2.0*B+2.0*C+D)/6.0;
+            A=h*f1(x[i],y[i],z[i]);
+            B=h*f1(x[i]+h/2.0,y[i]+A/2.0,z[i]);
+            C=h*f1(x[i]+h/2.0,y[i]+B/2.0,z[i]+A/2.0);
+            D=h*f1(x[i]+h,y[i]+C,z[i]+B/2.0);
+            E=h*f1(x[i]+h,y[i]+D,z[i]+C/2.0);
+            F=h*f1(x[i]+h,y[i]++,z[i]+D/2.0);
+            y[i+1]=y[i]+(A+2.0*B+2.0*C+2.0*D+E*2.0+F*2.0)/10.0;
         } else {
-            y[i+1]=y[i]+(55.0*f1(x[i],y[i])
-            -59.0*f1(x[i-1],y[i-1])
-            +37.0*f1(x[i-2],y[i-2])
-            -9.0*f1(x[i-3],y[i-3]))*h/24.0;
+            y[i+1]=y[i]+(55.0*f1(x[i],y[i],z[i])
+            -59.0*f1(x[i-1],y[i-1],z[i-1])
+            +37.0*f1(x[i-2],y[i-2],z[i-2])
+            -9.0*f1(x[i-3],y[i-3],z[i-3]))*h/24.0;
         }
         i++;
         r=exp(x[i])-x[i]-1;
-        printf("%8.5f,%8.5f (%8.5f)\n",x[i],y[i],r-y[i]);
+        printf("%8.5f,%8.5f,%8.5f, (%8.5f)\n",x[i],y[i],z[i],r-z[i]);
     } while(x[i]<2.0&&i<N);
 }
 
